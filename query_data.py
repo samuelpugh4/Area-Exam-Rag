@@ -1,7 +1,7 @@
 import argparse
 from langchain.vectorstores.chroma import Chroma
 from langchain.prompts import ChatPromptTemplate
-from langchain_openai import OpenAI
+from langchain_openai import ChatOpenAI
 
 from get_embedding_function import get_embedding_function
 import os
@@ -50,13 +50,16 @@ def query_rag(query_text: str):
     prompt = prompt_template.format(context=context_text, question=query_text)
     print("Prompt for model: ", prompt)
 
-    model = OpenAI(openai_api_key=OPENAI_API_KEY,model="gpt-4")
+    model = ChatOpenAI(openai_api_key=OPENAI_API_KEY,model="gpt-4")
     #model = Ollama(model="mistral")
     response_text = model.invoke(prompt)
 
     sources = [doc.metadata.get("id", None) for doc, _score in results]
     formatted_response = f"Response: {response_text}\nSources: {sources}"
     print(formatted_response)
+    for r in results:
+        print(r,"\n-----\n")
+
     return response_text
 
 
