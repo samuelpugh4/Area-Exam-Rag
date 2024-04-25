@@ -12,12 +12,12 @@ from langchain.vectorstores.chroma import Chroma
 from langchain_experimental.text_splitter import SemanticChunker
 
 
-CHROMA_PATH = "chroma"
+CHROMA_PATH = "chroma_test"
 DATA_PATH = "data"
 
 
 def main():
-    print("In Main of populate db")
+    print("In Main of test db")
     # Check if the database should be cleared (using the --clear flag).
     parser = argparse.ArgumentParser()
     parser.add_argument("--reset", action="store_true", help="Reset the database.")
@@ -28,8 +28,23 @@ def main():
 
     # Create (or update) the data store.
     documents = load_documents()
+    print(type(documents))
+    print(type(documents[0]))
+    print(len(documents))
+    print(documents[0].metadata)
+
+
     chunks = split_documents(documents)
-    add_to_chroma(chunks)
+
+    print(type(chunks))
+    print(len(chunks))
+    #print(chunks[0],"\n\n------\n\n")
+    print(chunks[1],"\n\n------\n\n")
+    print(chunks[2],"\n\n------\n\n")
+    print(chunks[3],"\n\n------\n\n")
+    print(chunks[4],"\n\n------\n\n")
+
+    #add_to_chroma(chunks)
 
 
 def load_documents():
@@ -39,6 +54,7 @@ def load_documents():
 
 def split_documents(documents: list[Document]):
     text_splitter = RecursiveCharacterTextSplitter(
+        separators=["."],
         chunk_size=800,
         chunk_overlap=100,
         length_function=len
